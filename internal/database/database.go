@@ -34,19 +34,16 @@ type couchbaseService struct {
 }
 
 const (
-	ConnectionString = "DB_CONN_STR"
-	UsernameKey      = "DB_USERNAME"
-	PasswordKey      = "DB_PASSWORD"
-	BucketName       = "DB_BUCKET_NAME"
-	ScopeName        = "inventory"
+	connectionString = "localhost"
+	username         = "el3ctum"
+	password         = "Dvl@el3ctum@2027"
+	bucketName       = "travel-sample"
+	scopeName        = "inventory"
 )
 
 func New() Service {
 	// gocb.SetLogger(gocb.VerboseStdioLogger())
-
-	connectionString := getEnvVar(ConnectionString)
-	username := getEnvVar(UsernameKey)
-	password := getEnvVar(PasswordKey)
+	fmt.Println("Initializing Database")
 
 	cluster, err := gocb.Connect("couchbase://"+connectionString, gocb.ClusterOptions{
 		Authenticator: gocb.PasswordAuthenticator{
@@ -59,12 +56,12 @@ func New() Service {
 	}
 
 	// Check if the specified scope exists
-	if !checkScopeExists(cluster, BucketName, ScopeName) {
+	if !checkScopeExists(cluster, bucketName, scopeName) {
 		fmt.Println("Inventory scope does not exist in the bucket. Ensure that you have the inventory scope in your travel-sample bucket.")
 		os.Exit(1)
 	}
 
-	bucket := cluster.Bucket(BucketName)
+	bucket := cluster.Bucket(bucketName)
 
 	err = bucket.WaitUntilReady(time.Second*5, nil)
 	if err != nil {
@@ -135,20 +132,20 @@ func (s *couchbaseService) Close() error {
 
 // GetScope returns a scope for the specified cluster, bucket, and scope name.
 func GetScope(cluster *gocb.Cluster) *gocb.Scope {
-	bucket := cluster.Bucket(BucketName)
-	scope := bucket.Scope(ScopeName)
+	bucket := cluster.Bucket(bucketName)
+	scope := bucket.Scope(scopeName)
 	return scope
 }
 
-// Helper function to retrieve an environment variable
-func getEnvVar(key string) string {
-	value := os.Getenv(key)
-	if value == "" && (key == "DB_USERNAME" || key == "DB_PASSWORD" || key == "DB_CONN_STR") {
-		fmt.Printf("Environment variable %s is empty.\n", key)
-		os.Exit(1)
-	}
-	return value
-}
+// // Helper function to retrieve an environment variable
+// func getEnvVar(key string) string {
+// 	value := os.Getenv(key)
+// 	if value == "" && (key == "DB_USERNAME" || key == "DB_PASSWORD" || key == "DB_CONN_STR") {
+// 		fmt.Printf("Environment variable %s is empty.\n", key)
+// 		os.Exit(1)
+// 	}
+// 	return value
+// }
 
 // Function to check if a scope exists in a bucket
 func checkScopeExists(cluster *gocb.Cluster, bucketName, scopeName string) bool {
