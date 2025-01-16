@@ -1,4 +1,4 @@
-package types
+package models
 
 import "time"
 
@@ -11,10 +11,4 @@ type Resource struct {
 	Attributes map[string]interface{} `json:"attributes"`
 	CreatedAt  time.Time              `json:"created_at"`
 	UpdatedAt  time.Time              `json:"updated_at"`
-}
-
-type Document struct {
-	Resource  Resource `json:"resource"`
-	Data      []byte   `json:"data"`
-	Encrypted bool     `json:"encrypted,omitempty"` // For indicating if the document is encrypted
 }

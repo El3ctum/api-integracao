@@ -1,4 +1,4 @@
-package types
+package models
 
 import "time"
 
@@ -17,10 +17,10 @@ type User struct {
 }
 
 type UserMetadata struct {
-    ID          string   `json:"id"`
-    Name        string   `json:"name"`
-    Companies   []string `json:"companies"`
-    Departments []string `json:"departments"`
-    Roles       []string `json:"roles"`
-    Permissions []string `json:"permissions"`
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Companies   []string `json:"companies"`
+	Departments []string `json:"departments"`
+	Roles       []string `json:"roles"`
+	Permissions []string `json:"permissions"`
 }

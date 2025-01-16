@@ -17,8 +17,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AllowCredentials: true, // Enable cookies/auth
 	}))
 
-	v1 := r.Group("/v1")
-	RegisterAuthRoutes(v1, s)
+	// v1 := r.Group("/v1")
+	// RegisterAuthRoutes(v1, s)
 
 	r.GET("/", s.HelloWorldHandler)
 
