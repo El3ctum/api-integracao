@@ -36,9 +36,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Get a reference to the default collection, required for older Couchbase server versions
-	// col := bucket.DefaultCollection()
-
 	col := bucket.Scope("tenant_agent_00").Collection("users")
 
 	type User struct {
