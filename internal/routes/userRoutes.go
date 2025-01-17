@@ -7,5 +7,10 @@ import (
 )
 
 func HandleUsers(router *gin.RouterGroup, controllers controllers.ControllerInitializaer) {
-	router.GET("/users/:id", controllers.UserController.InsertDocumentForUser())
+	router.POST("/users", controllers.UserController.InsertDocumentForUser())
+	router.GET("/users/:id", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 }

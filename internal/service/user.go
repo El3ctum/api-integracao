@@ -28,11 +28,10 @@ func NewUserService(scope *gocb.Scope) *UserService {
 }
 
 func (s *UserService) CreateUser(docKey string, data *models.User) error {
-	// _, err := s.scope.Collection(s.collectionName).Insert(docKey, data, nil)
-	// if err != nil {
-	// 	return err
-	// }
 	fmt.Println("Criando Usuário...")
-	fmt.Println(data)
+	_, err := s.scope.Collection(s.collectionName).Insert(docKey, data, nil)
+	if err != nil {
+		return err
+	}
 	return nil
 }

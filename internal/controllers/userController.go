@@ -5,7 +5,6 @@ import (
 	"api-integracao/internal/models"
 	services "api-integracao/internal/service"
 	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,22 +21,20 @@ func NewUserController(userService services.IUserService) *UserController {
 
 func (uc *UserController) InsertDocumentForUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		err := uc.UserService.CreateUser("teste", &models.User{
-			ID:          "Teste",
-			FirstName:   "Davi",
-			LastName:    "vieira",
-			Email:       "davilealmarcal198@gmail.com",
-			Password:    "zezinho123",
-			Companies:   []string{"Company1", "Company2"},
-			Departments: []string{"Processos", "RPA"},
-			Roles:       []string{"Admin", "Analista"},
-			Permissions: []string{"read", "delete"},
-		})
+
+		var user models.User
+
+		if err := c.ShouldBindJSON(&user); err != nil {
+			c.JSON(400, gin.H{"msg": err.Error()})
+			return
+		}
+
+		err := uc.UserService.CreateUser(user.ID, &user)
 		if err != nil {
 			fmt.Println("Erro ao criar usuário")
+			fmt.Println(err)
 		}
-		c.JSON(http.StatusCreated, gin.H{
-			"User": "User created with sucess",
-		})
+
+		c.JSON(200, gin.H{"name": user.FirstName, "uuid": user.ID})
 	}
 }

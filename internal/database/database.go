@@ -40,7 +40,7 @@ const (
 	username         = "davi_vieira"
 	password         = "Dvl@el3ctum@2027"
 	bucketName       = "travel-sample"
-	scopeName        = "inventory"
+	scopeName        = "tenant_agent_00"
 )
 
 func New() Service {
