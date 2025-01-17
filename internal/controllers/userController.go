@@ -2,7 +2,12 @@ package controllers
 
 import (
 	// "github.com/gin-gonic/gin"
+	"api-integracao/internal/models"
 	services "api-integracao/internal/service"
+	"fmt"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
@@ -15,6 +20,14 @@ func NewUserController(userService services.IUserService) *UserController {
 	}
 }
 
-// func (uc *UserController) InsertDocumentoForUser() gin.HandlerFunc {
-// 	return
-// }
+func (uc *UserController) InsertDocumentForUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		err := uc.UserService.CreateUser("teste", &models.User{})
+		if err != nil {
+			fmt.Println("Erro ao criar usuário")
+		}
+		c.JSON(http.StatusCreated, gin.H{
+			"User": "User created with sucess",
+		})
+	}
+}

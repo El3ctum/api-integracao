@@ -1,8 +1,11 @@
 package server
 
 import (
+	"api-integracao/internal/helpers"
+	"api-integracao/internal/routes"
 	"net/http"
 
+	// services "api-integracao/internal/service"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -17,8 +20,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AllowCredentials: true, // Enable cookies/auth
 	}))
 
-	// v1 := r.Group("/v1")
-	// RegisterAuthRoutes(v1, s)
+	controllers := helpers.InitControllers(s.db.GetScope())
+
+	v1 := r.Group("/v1")
+	routes.HandleUsers(v1, controllers)
 
 	r.GET("/", s.HelloWorldHandler)
 

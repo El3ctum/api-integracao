@@ -23,6 +23,8 @@ type Service interface {
 	// The keys and values in the map are service-specific.
 	Health() map[string]string
 
+	GetScope() *gocb.Scope
+
 	// Close terminates the database connection.
 	// It returns an error if the connection cannot be closed.
 	Close() error
@@ -35,7 +37,7 @@ type couchbaseService struct {
 
 const (
 	connectionString = "localhost"
-	username         = "el3ctum"
+	username         = "davi_vieira"
 	password         = "Dvl@el3ctum@2027"
 	bucketName       = "travel-sample"
 	scopeName        = "inventory"
@@ -131,8 +133,8 @@ func (s *couchbaseService) Close() error {
 }
 
 // GetScope returns a scope for the specified cluster, bucket, and scope name.
-func GetScope(cluster *gocb.Cluster) *gocb.Scope {
-	bucket := cluster.Bucket(bucketName)
+func (s *couchbaseService) GetScope() *gocb.Scope {
+	bucket := s.db.Bucket(s.bucket.Name())
 	scope := bucket.Scope(scopeName)
 	return scope
 }
