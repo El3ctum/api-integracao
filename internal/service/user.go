@@ -33,5 +33,6 @@ func (s *UserService) CreateUser(docKey string, data *models.User) error {
 	// 	return err
 	// }
 	fmt.Println("Criando Usuário...")
+	fmt.Println(data)
 	return nil
 }

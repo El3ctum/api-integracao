@@ -22,7 +22,17 @@ func NewUserController(userService services.IUserService) *UserController {
 
 func (uc *UserController) InsertDocumentForUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		err := uc.UserService.CreateUser("teste", &models.User{})
+		err := uc.UserService.CreateUser("teste", &models.User{
+			ID:          "Teste",
+			FirstName:   "Davi",
+			LastName:    "vieira",
+			Email:       "davilealmarcal198@gmail.com",
+			Password:    "zezinho123",
+			Companies:   []string{"Company1", "Company2"},
+			Departments: []string{"Processos", "RPA"},
+			Roles:       []string{"Admin", "Analista"},
+			Permissions: []string{"read", "delete"},
+		})
 		if err != nil {
 			fmt.Println("Erro ao criar usuário")
 		}
