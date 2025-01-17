@@ -25,6 +25,7 @@ func (uc *UserController) InsertDocumentForUser() gin.HandlerFunc {
 		var user models.User
 
 		if err := c.ShouldBindJSON(&user); err != nil {
+			fmt.Println(err)
 			c.JSON(400, gin.H{"msg": err.Error()})
 			return
 		}

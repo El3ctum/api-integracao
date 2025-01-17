@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+        input[type="text"], input[type="email"], input[type="password"], input[type="datetime-local"] {
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+        }
+        .input-group input {
+            width: 100%;
+        }
+        .hint {
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cadastro de Usuário</h1>
+
+    <form id="userForm">
+        <div class="input-group">
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id" required>
+        </div>
+
+        <div class="input-group">
+            <label for="first_name">Nome:</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
+
+        <div class="input-group">
+            <label for="last_name">Sobrenome:</label>
+            <input type="text" id="last_name" name="last_name" required>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="input-group">
+            <label for="companies">Empresas (separadas por vírgula):</label>
+            <input type="text" id="companies" name="companies" placeholder="Empresa A, Empresa B">
+            <span class="hint">Ex: Empresa A, Empresa B</span>
+        </div>
+
+        <div class="input-group">
+            <label for="departments">Departamentos (separados por vírgula):</label>
+            <input type="text" id="departments" name="departments" placeholder="IT, Marketing">
+            <span class="hint">Ex: IT, Marketing</span>
+        </div>
+
+        <div class="input-group">
+            <label for="roles">Funções (separadas por vírgula):</label>
+            <input type="text" id="roles" name="roles" placeholder="Admin, Usuário">
+            <span class="hint">Ex: Admin, Usuário</span>
+        </div>
+
+        <div class="input-group">
+            <label for="permissions">Permissões (separadas por vírgula):</label>
+            <input type="text" id="permissions" name="permissions" placeholder="ler, escrever, deletar">
+            <span class="hint">Ex: ler, escrever, deletar</span>
+        </div>
+
+        <div class="input-group">
+            <label for="created_at">Data de Criação:</label>
+            <input type="datetime-local" id="created_at" name="created_at" required>
+        </div>
+
+        <div class="input-group">
+            <label for="last_login">Último Login:</label>
+            <input type="datetime-local" id="last_login" name="last_login">
+        </div>
+
+        <input type="submit" value="Enviar">
+    </form>
+
+    <div id="responseMessage"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('userForm');
+    const responseMessage = document.getElementById('responseMessage');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevenir recarregamento da página
+
+        // Coletando os dados do formulário
+        const formData = new FormData(form);
+
+        // Convertendo FormData para um objeto JavaScript para melhor manipulação
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key === 'created_at' || key === 'last_login') {
+                const date = new Date(value);
+                // Formata a data no formato ISO com zona de tempo
+                data[key] = date.toISOString();
+            } else if (['companies', 'departments', 'roles', 'permissions'].includes(key)) {
+                data[key] = value.split(',').map(item => item.trim());
+            } else {
+                data[key] = value;
+            }
+        });
+        console.log(data)
+        // Enviando a requisição
+        fetch('http://localhost:8080/v1/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            responseMessage.innerHTML = `<p style="color: green;">${data}!</p>`;
+            //form.reset(); // Limpa o formulário
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            responseMessage.innerHTML = `<p style="color: red;">Erro ao enviar o formulário: ${error.message}</p>`;
+        });
+    });
+});
+</script>
+
+</body>
+</html>
