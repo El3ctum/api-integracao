@@ -7,6 +7,6 @@ import (
 )
 
 func HandleAuth(router *gin.RouterGroup, controllers controllers.ControllerInitializer) {
-	router.POST("/login", controllers.UserController.GetUserById())
-	router.POST("/register", controllers.UserController.InsertDocumentForUser())
+	router.POST("/login", controllers.AuthController.Login())
+	router.POST("/register", controllers.AuthController.Login())
 }

@@ -80,3 +80,45 @@ func (ac *AuthController) Login() gin.HandlerFunc {
 		})
 	}
 }
+
+func (ac *AuthController) Register() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var user models.User
+
+		// Bind the incoming JSON to the `user` struct
+		if err := c.ShouldBindJSON(&user); err != nil {
+			fmt.Println("Error binding user JSON:", err)
+			c.JSON(http.StatusBadRequest, gin.H{"Response": "Invalid input"})
+			return
+		}
+
+		// Check if the password is empty
+		if user.Password == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"Response": "Invalid inputs"})
+			return
+		}
+
+		// Hash the password to save on the database
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			fmt.Println("Password hashing has failed:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"Response": "User could not be created now, try again later"})
+			return
+		}
+
+		user.Password = string(hashPassword)
+
+		// Save the user on the database
+		err = ac.AuthService.RegisterUser(&user)
+		if err != nil {
+			fmt.Println("User not registered:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"Response": "User could not be created now, try again later"})
+			return
+		}
+
+		// Respond with success
+		c.JSON(http.StatusOK, gin.H{
+			"Response": fmt.Sprintf("User created successfully: %s", user.FirstName)})
+	}
+
+}
