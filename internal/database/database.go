@@ -39,8 +39,8 @@ const (
 	connectionString = "localhost"
 	username         = "davi_vieira"
 	password         = "Dvl@el3ctum@2027"
-	bucketName       = "travel-sample"
-	scopeName        = "tenant_agent_00"
+	bucketName       = "integracao"
+	scopeName        = "internal"
 )
 
 func New() Service {

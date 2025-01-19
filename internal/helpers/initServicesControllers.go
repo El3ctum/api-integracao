@@ -7,7 +7,7 @@ import (
 	"github.com/couchbase/gocb/v2"
 )
 
-func InitControllers(scope *gocb.Scope) controllers.ControllerInitializaer {
+func InitControllers(scope *gocb.Scope) controllers.ControllerInitializer {
 	services := service.InitServices(scope)
 	controllers := controllers.InitControllers(*services)
 	return controllers

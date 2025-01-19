@@ -7,7 +7,7 @@ type User struct {
 	FirstName   string    `json:"first_name"`
 	LastName    string    `json:"last_name"`
 	Email       string    `json:"email"`
-	Password    string    `json:"password,omitempty"` // Omit in JSON if not needed for API responses
+	Password    string    `json:"password"`
 	Companies   []string  `json:"companies"`
 	Departments []string  `json:"departments"`
 	Roles       []string  `json:"roles"`
