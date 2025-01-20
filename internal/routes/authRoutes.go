@@ -8,5 +8,5 @@ import (
 
 func HandleAuth(router *gin.RouterGroup, controllers controllers.ControllerInitializer) {
 	router.POST("/login", controllers.AuthController.Login())
-	router.POST("/register", controllers.AuthController.Login())
+	router.POST("/register", controllers.AuthController.Register())
 }

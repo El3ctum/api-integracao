@@ -40,7 +40,7 @@ func (ac *AuthController) Login() gin.HandlerFunc {
 		}
 
 		// Retrieve the user from the database using email
-		userDb, err := ac.AuthService.GetUserByEmail(&user)
+		userDb, err := ac.AuthService.GetUserByEmail(user.Email)
 		if err != nil {
 			fmt.Println("User not found:", err)
 			c.JSON(http.StatusUnauthorized, gin.H{"Response": "Invalid credentials"})
@@ -50,14 +50,14 @@ func (ac *AuthController) Login() gin.HandlerFunc {
 		// Compare the hashed password with the provided password
 		err = bcrypt.CompareHashAndPassword([]byte(userDb.Password), []byte(user.Password))
 		if err != nil {
-			fmt.Println("Password mismatch")
+			fmt.Printf("Password mismatch: %s - %s\n", string([]byte(userDb.Password)), string([]byte(user.Password)))
 			c.JSON(http.StatusUnauthorized, gin.H{"Response": "Invalid credentials"})
 			return
 		}
 
 		// Prepare metadata for JWT
 		userMetadata := models.UserMetadata{
-			ID:          userDb.ID,
+			ID:          *userDb.ID,
 			Name:        fmt.Sprintf("%s %s", userDb.FirstName, userDb.LastName),
 			Companies:   userDb.Companies,
 			Departments: userDb.Departments,

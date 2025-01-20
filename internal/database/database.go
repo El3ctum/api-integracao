@@ -59,7 +59,7 @@ func New() Service {
 
 	// Check if the specified scope exists
 	if !checkScopeExists(cluster, bucketName, scopeName) {
-		fmt.Println("Inventory scope does not exist in the bucket. Ensure that you have the inventory scope in your travel-sample bucket.")
+		fmt.Printf("%s scope does not exist in the bucket. Ensure that you have the %s scope in your %s bucket.", scopeName, scopeName, bucketName)
 		os.Exit(1)
 	}
 
@@ -155,7 +155,7 @@ func checkScopeExists(cluster *gocb.Cluster, bucketName, scopeName string) bool 
 	// Fetch all scopes in the bucket
 	scopes, err := bucket.Collections().GetAllScopes(nil)
 	if err != nil {
-		fmt.Println("Error fetching scopes in the cluster. Ensure that the travel sample bucket exists in the cluster.")
+		fmt.Println("Error fetching scopes in the cluster. Ensure that the %s bucket exists in the cluster.", bucketName)
 		return false
 	}
 
