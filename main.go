@@ -16,7 +16,7 @@ func main() {
 	connectionString := "localhost"
 	bucketName := "travel-sample"
 	username := "el3ctum"
-	password := "Dvl@el3ctum@2027"
+	password := "1234567890"
 
 	// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
 	cluster, err := gocb.Connect("couchbase://"+connectionString, gocb.ClusterOptions{
