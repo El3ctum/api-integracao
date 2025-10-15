@@ -27,7 +27,7 @@ func GenerateJwtToken(user models.UserMetadata) (string, error) {
 		Data: map[string]string{
 			"id":          user.ID,
 			"name":        user.Name,
-			"departments": strings.Join(user.Departments, "|"), // Use '|' to avoid issues with commas
+			"departments": strings.Join(user.Departments, "|"), // Used '|' to avoid issues with commas
 			"roles":       strings.Join(user.Roles, "|"),
 			"permissions": strings.Join(user.Permissions, "|"),
 		},
@@ -44,7 +44,7 @@ func GenerateJwtToken(user models.UserMetadata) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims) // Changed to HS256 for simplicity with byte key
 	signedString, err := token.SignedString(key)
 	if err != nil {
-		return "", err // Correct error handling
+		return "", err
 	}
 
 	return signedString, nil
