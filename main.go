@@ -9,16 +9,13 @@ import (
 )
 
 func main() {
-	// Uncomment following line to enable logging
 	gocb.SetLogger(gocb.VerboseStdioLogger())
 
-	// Update this to your cluster details
 	connectionString := "localhost"
 	bucketName := "travel-sample"
 	username := "el3ctum"
 	password := "1234567890"
 
-	// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
 	cluster, err := gocb.Connect("couchbase://"+connectionString, gocb.ClusterOptions{
 		Authenticator: gocb.PasswordAuthenticator{
 			Username: username,
