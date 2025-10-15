@@ -17,7 +17,7 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	// Listen for the interrupt signal.
+	// Listen for the interrupt signal
 	<-ctx.Done()
 
 	log.Println("shutting down gracefully, press Ctrl+C again to force")
@@ -39,10 +39,8 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 func main() {
 	server := server.NewServer()
 
-	// Create a done channel to signal when the shutdown is complete
 	done := make(chan bool, 1)
 
-	// Run graceful shutdown in a separate goroutine
 	go gracefulShutdown(server, done)
 
 	err := server.ListenAndServe()
@@ -50,7 +48,6 @@ func main() {
 		panic(fmt.Sprintf("http server error: %s", err))
 	}
 
-	// Wait for the graceful shutdown to complete
 	<-done
 	log.Println("Graceful shutdown complete.")
 }
